@@ -5,8 +5,8 @@
  */
 package dao;
 
-import br.com.mcvcille.portal.entity.control.entity.Cidade;
-import br.com.mcvcille.portal.entity.control.entity.Estado;
+import entity.Cidade;
+import entity.Estado;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;

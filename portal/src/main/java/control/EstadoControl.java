@@ -5,9 +5,9 @@
  */
 package control;
 
-import br.com.mcvcille.portal.entity.control.entity.Estado;
 import dao.DaoGenerico;
 import dao.DaoHibernateGenerico;
+import entity.Estado;
 import java.util.List;
 
 
