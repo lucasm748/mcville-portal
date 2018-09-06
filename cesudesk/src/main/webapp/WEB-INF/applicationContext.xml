@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans
+                             http://www.springframework.org/schema/beans/spring-beans.xsd
+                             http://www.springframework.org/schema/security
+                             http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+    <http auto-config="true" access-denied-page="/negado.xhtml" use-expressions="true">
+        <intercept-url pattern="/index.html" access="hasAnyRole('ADM')"/>
+        <intercept-url pattern="/usuario/**" access="hasAnyRole('ADM')"/>
+        <form-login login-page="/login.xhtml" authentication-failure-url="/login.xhtml"/>
+        <logout logout-success-url="/login.xhtml" logout-url="/logout.xhtml"/>
+    </http>
+
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service data-source-ref="dataSource"
+                               users-by-username-query=""
+                               authorities-by-username-query=""/>
+                          
+        </authentication-provider>
+    </authentication-manager>
+
+    <b:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"/>
+    
+</b:beans>

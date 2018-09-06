@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <body>
+            <ui:composition>
+                <h:form id="formmenu">
+                    <p:menubar styleClass="menubar">
+                        <p:submenu label="Gestão" icon="ui-icon-contact">
+                            <p:submenu label="Pessoas">
+                                <p:menuitem value="Cargos" action="/aplicacao/usuario/cargo/lista_cargo" update="@this"/>
+                                <p:menuitem value="Usuários" action="/aplicacao/usuario/lista_usuario" ajax="false"/>
+                            </p:submenu>
+                            <p:submenu label="Projetos">
+                                <p:menuitem value="Projetos" action="/aplicacao/projeto/lista_projeto" ajax="false"/>
+                            </p:submenu>
+                            <p:menuitem value="Login" icon="ui-icon-key" action="/login"/>
+                            <p:menuitem value="Sair" action="#{LoginMB.logout()}" icon="ui-icon-close"/>
+                        </p:submenu>
+                        <p:submenu label="Tarefas" icon="ui-icon-script">
+                            <p:menuitem value="Módulos" action="aplicacao/modulo/lista_modulo" ajax="false"/>
+                            <p:menuitem value="Meus Tickets" action="aplicacao/tarefa/minhas_tarefas" ajax="false" icon="ui-icon-contact"/>
+                            <p:menuitem value="Tarefas" action="aplicacao/tarefa/lista_tarefa" ajax="false"/>
+                            <p:menuitem value="Tipos de Tarefa" action="/aplicacao/tipo_tarefa/lista_tipotarefa" ajax="false"/>
+                            <p:submenu label="Triagens">
+                                <p:menuitem value="Triagens" action=" " ajax="false"/>
+                                <p:menuitem value="Execuções" action=" " ajax="false"/>
+                            </p:submenu>
+                        </p:submenu>
+                        <p:submenu label="Relatórios" icon="ui-icon-document-b">
+                            <p:submenu label="Cadastros"></p:submenu>
+                            <p:submenu label="Tarefas"></p:submenu>
+                            <p:submenu label="Gerenciais"></p:submenu>
+                            <p:submenu label="Backlogs"></p:submenu>
+                        </p:submenu>
+                        <p:submenu label="Ferramentas" icon="ui-icon-bookmark">
+                            <p:menuitem value="Backup" action=" " ajax="false"/>
+
+                        </p:submenu>
+                        <p:submenu label="Ajuda" icon="ui-icon-help">
+                            <p:menuitem value="Dúvidas" action=" " ajax="false"/>
+                            <p:menuitem value="Sobre" action=" " ajax="false"/>
+                            <p:menuitem value="Sugestões" action=" " ajax="false"/>
+                        </p:submenu>
+                    </p:menubar>
+                </h:form>
+                <ui:insert name="content">
+                    <h:graphicImage url="/resources/images/logotipo.png" styleClass="logotipo-fundo"/>
+                </ui:insert>
+            </ui:composition>
+        </body>
+    </f:view>
+</html>

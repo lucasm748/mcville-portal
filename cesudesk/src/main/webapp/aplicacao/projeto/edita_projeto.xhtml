@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="formulario">
+                <p:panel header="Gestão de Projetos">
+                    <h:outputLabel value="Campos com (*) obrigatórios " style="color: red"/>
+                    <p:fieldset legend="DADOS" style="background-color:  aliceblue; margin: 8px" >
+                        <h:panelGrid columns="2" style="padding: 8px">
+                            <h:outputLabel value="Descrição do Projeto*" style="font-weight: bolder"/>
+                            <p:inputText value="#{ProjetoMB.projeto.desc_projeto}" required="true" requiredMessage="Nome obrigatório" size="79"/>
+                            <h:outputLabel value="Data de Início*" style="font-weight: bolder"/>
+                            <p:calendar value="#{ProjetoMB.projeto.dt_inicio}" required="true" requiredMessage="Data de início obrigatório"/>
+                            <h:outputLabel value="Data de Encerramento" style="font-weight: bolder"/>
+                            <p:calendar value="#{ProjetoMB.projeto.dh_fechamento}" required="false" pattern="dd/MM/yyyy HH:mm:ss"/>
+                            <h:outputLabel value="Status do Projeto*" style="font-weight: bolder"/>
+                            <p:selectOneMenu value="#{ProjetoMB.projeto.tp_statusprojeto}" required="true" requiredMessage="Status do projeto é obrigatório!">
+                                <f:selectItem itemLabel="Andamento" itemValue="Andamento"/>
+                                <f:selectItem itemLabel="Fechado" itemValue="Fechado"/>
+                                <f:selectItem itemLabel="Pausado" itemValue="Pausado"/>
+                                <f:selectItem itemLabel="Previso" itemValue="Previso"/>
+                            </p:selectOneMenu>
+                            <h:outputLabel value="Informações Complementares" style="font-weight: bolder"/>
+                            <h:inputTextarea value="#{ProjetoMB.projeto.inf_complementar}" cols="50" rows="5"/>                        </h:panelGrid>
+                    </p:fieldset>
+                </p:panel>
+                <p:commandButton value="salvar" action="#{ProjetoMB.salvar()}" ajax="false" icon="ui-icon-check"/>
+                <p:commandButton value="cancelar" action="/aplicacao/projeto/lista_projeto" actionListener="#{ProjetoMB.cancelar()}" ajax="false" immediate="true" icon="ui-icon-close"/>
+
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</html>

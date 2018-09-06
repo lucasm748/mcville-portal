@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://java.sun.com/jsf/html" 
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Acesso Negado</title>
+        <style type="text/css">
+            *{
+                font-size: 12px;
+            }
+        </style>
+    </h:head>
+
+
+    <h:body>
+        <p:messages id="messages" showDetail="false" autoUpdate="true"/>
+        <p:panel header="CESUDESK - ACESSO NEGADO">
+
+            <h:form>
+                
+                <p:hotkey bind="ESC" action="/aplicacao/index"/>
+                <h:panelGrid columns="1">
+
+                    <p:graphicImage url="/resources/imagens/acesso_negado.jpg" style="padding-top: 100px; padding-left: 370px;"/>
+
+                    <br/><br/><br/><br/><br/>
+
+                </h:panelGrid>
+
+                <h:outputLabel value="Usuário sem permissão de acesso." 
+                               style="font-weight: bold; font-size: 18px; padding-left: 200px" /> <br/><br/>
+                <h:outputLabel value="Contate o Administrador." 
+                               style="color: red; font-size: 18px; padding-left: 450px" /> <br/> <p:separator/>
+
+                <p:separator/>
+            </h:form>
+        </p:panel>
+    </h:body>   
+
+</html>

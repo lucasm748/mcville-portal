@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="formulario" class="">
+
+                <p:fieldset id="fsconteudo">
+                    <h2>Edição De Módulos</h2>
+                    <h4>Campos com (*) obrigatórios</h4>
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Descrição do Modulo*"/>
+                        <p:inputText value="#{ModuloMB.modulo.desc_modulo}" required="true" requiredMessage="Nome obrigatório"/>
+                        <h:outputText value="Informações Complementares"/>
+                        <h:inputTextarea value="#{ModuloMB.modulo.inf_complementar}" cols="50" rows="5"/>                       
+                    </h:panelGrid>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                </p:fieldset>
+                <p:commandButton value="salvar" action="#{ModuloMB.salvar()}" ajax="false" icon="ui-icon-check"/>
+                <p:commandButton value="cancelar" action="/aplicacao/modulo/lista_modulo" actionListener="#{ModuloMB.cancelar()}" ajax="false" immediate="true" icon="ui-icon-close"/>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+
+</html>

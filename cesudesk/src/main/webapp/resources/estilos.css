@@ -1,0 +1,65 @@
+html, body { 
+    margin: 0;
+    height: 100%;
+    background-color: #C0C1C2;
+    font-size: 12px;
+}
+
+.logotipo-fundo{
+    width:50%;
+    height:50%;
+    margin: 10% 10% 10% 20%;
+    position: relative;
+    opacity: 0.5;
+}
+.pagina-div{
+    margin: 0 auto;
+    width: 80%;
+    height: 100%;    
+}
+.header-div{
+    position: relative;
+    text-align: center;
+    color: white;
+    font-family: cursive;
+    font-weight: 600;
+}
+.content-div{
+    width: 100%;
+    min-width: 70%;
+    min-height: 85%;  
+    max-height: 95%;  
+    text-align: left;
+    font-family: cursive;
+    background-color: white;
+}
+.footer-div{
+    text-align: right;
+    color: #C0C1C2;
+    font-family: cursive;
+    font-weight: 600;
+    background-color: #80AAC4;
+
+}
+.ui-fieldset{
+    min-width: 50%;
+    height: 100%;
+    padding: 2%;    
+}
+
+.ui-panel{
+    min-height: 100%;
+}
+
+.tb-exec{
+    width: 70%;
+    text-align: center;
+    margin: 0 auto;
+}
+.fundo-login{
+    opacity: 0.4;
+    margin: 0 auto;
+}
+.panel-login{
+    left: 300px;
+}

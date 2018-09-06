@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelVenda" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.2078825000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dsVenda">
+		<queryString language="SQL">
+			<![CDATA[SELECT
+     produto."id" AS produto_id,
+     produto."descricao" AS produto_descricao,
+     venda."id" AS venda_id,
+     venda."datavenda" AS venda_datavenda,
+     venda."valortotal" AS venda_valortotal,
+     venda_itensvenda."venda_id" AS venda_itensvenda_venda_id,
+     venda_itensvenda."itensvenda_id" AS venda_itensvenda_itensvenda_id,
+     itensvenda."id" AS itensvenda_id,
+     itensvenda."quantidade" AS itensvenda_quantidade,
+     itensvenda."subtotal" AS itensvenda_subtotal,
+     itensvenda."valorprod" AS itensvenda_valorprod,
+     itensvenda."produto_id" AS itensvenda_produto_id,
+     produto."unidade" AS produto_unidade
+FROM
+     "public"."venda" venda INNER JOIN "public"."venda_itensvenda" venda_itensvenda ON venda."id" = venda_itensvenda."venda_id"
+     INNER JOIN "public"."itensvenda" itensvenda ON venda_itensvenda."itensvenda_id" = itensvenda."id"
+     INNER JOIN "public"."produto" produto ON itensvenda."produto_id" = produto."id"]]>
+		</queryString>
+		<field name="produto_id" class="java.lang.Long"/>
+		<field name="produto_descricao" class="java.lang.String"/>
+		<field name="itensvenda_valorprod" class="java.math.BigDecimal"/>
+		<field name="itensvenda_quantidade" class="java.lang.Integer"/>
+		<field name="produto_unidade" class="java.lang.String"/>
+		<field name="itensvenda_subtotal" class="java.math.BigDecimal"/>
+		<group name="produto_id">
+			<groupExpression><![CDATA[$F{produto_id}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="FILTRO_VENDA" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     pessoa."id" AS pessoa_id,
+     pessoa."nome" AS pessoa_nome,
+     estado."id" AS estado_id,
+     estado."sigla" AS estado_sigla,
+     cidade."id" AS cidade_id,
+     cidade."nome" AS cidade_nome,
+     cidade."estado_id" AS cidade_estado_id,
+     produto."descricao" AS produto_descricao,
+     produto."unidade" AS produto_unidade,
+     empresa."id" AS empresa_id,
+     empresa."cep" AS empresa_cep,
+     empresa."cnpj" AS empresa_cnpj,
+     empresa."email" AS empresa_email,
+     empresa."endereoo" AS empresa_endereoo,
+     empresa."fantasia" AS empresa_fantasia,
+     empresa."inscricao" AS empresa_inscricao,
+     empresa."nome" AS empresa_nome,
+     empresa."numero" AS empresa_numero,
+     empresa."telefone" AS empresa_telefone,
+     empresa."telefone2" AS empresa_telefone2,
+     empresa."cidade_id" AS empresa_cidade_id,
+     cidade_A."id" AS cidade_A_id,
+     cidade_A."nome" AS cidade_A_nome,
+     cidade_A."estado_id" AS cidade_A_estado_id,
+     estado_A."id" AS estado_A_id,
+     estado_A."nome" AS estado_A_nome,
+     estado_A."sigla" AS estado_A_sigla,
+     itensvenda."id" AS itensvenda_id,
+     itensvenda."quantidade" AS itensvenda_quantidade,
+     itensvenda."subtotal" AS itensvenda_subtotal,
+     itensvenda."valorprod" AS itensvenda_valorprod,
+     itensvenda."produto_id" AS itensvenda_produto_id,
+     venda_itensvenda."venda_id" AS venda_itensvenda_venda_id,
+     venda_itensvenda."itensvenda_id" AS venda_itensvenda_itensvenda_id,
+     venda."id" AS venda_id,
+     venda."datavenda" AS venda_datavenda,
+     venda."valortotal" AS venda_valortotal,
+     venda."pessoa_id" AS venda_pessoa_id
+FROM
+     "public"."estado" estado INNER JOIN "public"."cidade" cidade ON estado."id" = cidade."estado_id"
+     INNER JOIN "public"."pessoa" pessoa ON cidade."id" = pessoa."cidade_id"
+     INNER JOIN "public"."venda" venda ON pessoa."id" = venda."pessoa_id"
+     INNER JOIN "public"."venda_itensvenda" venda_itensvenda ON venda."id" = venda_itensvenda."venda_id"
+     INNER JOIN "public"."itensvenda" itensvenda ON venda_itensvenda."itensvenda_id" = itensvenda."id"
+     INNER JOIN "public"."produto" produto ON itensvenda."produto_id" = produto."id",
+     "public"."cidade" cidade_A INNER JOIN "public"."empresa" empresa ON cidade_A."id" = empresa."cidade_id"
+     INNER JOIN "public"."estado" estado_A ON cidade_A."estado_id" = estado_A."id"
+WHERE
+     venda_id = $P{FILTRO_VENDA}]]>
+	</queryString>
+	<field name="pessoa_id" class="java.lang.Long"/>
+	<field name="pessoa_nome" class="java.lang.String"/>
+	<field name="estado_id" class="java.lang.Long"/>
+	<field name="estado_sigla" class="java.lang.String"/>
+	<field name="cidade_id" class="java.lang.Long"/>
+	<field name="cidade_nome" class="java.lang.String"/>
+	<field name="cidade_estado_id" class="java.lang.Long"/>
+	<field name="produto_descricao" class="java.lang.String"/>
+	<field name="produto_unidade" class="java.lang.String"/>
+	<field name="empresa_id" class="java.lang.Long"/>
+	<field name="empresa_cep" class="java.lang.String"/>
+	<field name="empresa_cnpj" class="java.lang.String"/>
+	<field name="empresa_email" class="java.lang.String"/>
+	<field name="empresa_endereoo" class="java.lang.String"/>
+	<field name="empresa_fantasia" class="java.lang.String"/>
+	<field name="empresa_inscricao" class="java.lang.String"/>
+	<field name="empresa_nome" class="java.lang.String"/>
+	<field name="empresa_numero" class="java.lang.String"/>
+	<field name="empresa_telefone" class="java.lang.String"/>
+	<field name="empresa_telefone2" class="java.lang.String"/>
+	<field name="empresa_cidade_id" class="java.lang.Long"/>
+	<field name="cidade_a_id" class="java.lang.Long"/>
+	<field name="cidade_a_nome" class="java.lang.String"/>
+	<field name="cidade_a_estado_id" class="java.lang.Long"/>
+	<field name="estado_a_id" class="java.lang.Long"/>
+	<field name="estado_a_nome" class="java.lang.String"/>
+	<field name="estado_a_sigla" class="java.lang.String"/>
+	<field name="itensvenda_id" class="java.lang.Long"/>
+	<field name="itensvenda_quantidade" class="java.lang.Integer"/>
+	<field name="itensvenda_subtotal" class="java.math.BigDecimal"/>
+	<field name="itensvenda_valorprod" class="java.math.BigDecimal"/>
+	<field name="itensvenda_produto_id" class="java.lang.Long"/>
+	<field name="venda_itensvenda_venda_id" class="java.lang.Long"/>
+	<field name="venda_itensvenda_itensvenda_id" class="java.lang.Long"/>
+	<field name="venda_id" class="java.lang.Long"/>
+	<field name="venda_datavenda" class="java.sql.Timestamp"/>
+	<field name="venda_valortotal" class="java.math.BigDecimal"/>
+	<field name="venda_pessoa_id" class="java.lang.Long"/>
+	<group name="venda_id">
+		<groupExpression><![CDATA[$F{venda_id}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="144" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="1" width="801" height="143"/>
+			</rectangle>
+			<textField>
+				<reportElement x="19" y="0" width="614" height="21"/>
+				<textElement>
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empresa_fantasia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="19" y="34" width="614" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{empresa_nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="19" y="62" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{empresa_cnpj}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="131" y="62" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{empresa_inscricao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="19" y="87" width="221" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{empresa_endereoo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="255" y="87" width="31" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{empresa_numero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="302" y="87" width="68" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{empresa_cep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="87" width="195" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cidade_a_nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="587" y="87" width="33" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{estado_a_sigla}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="19" y="114" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{empresa_telefone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="131" y="114" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{empresa_telefone2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="114" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{empresa_email}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="658" y="1" width="143" height="20"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="679" y="1" width="122" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nota de Venda]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="90" splitType="Stretch">
+			<textField>
+				<reportElement x="8" y="38" width="69" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{venda_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="70" y="38" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{venda_datavenda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="438" y="38" width="152" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cidade_nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="649" y="40" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{estado_sigla}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="589" y="70" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="401" y="70" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor Unitário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="70" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Produto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="702" y="70" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="18" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="70" y="18" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data da Venda]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="18" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="438" y="20" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="649" y="19" width="100" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[UF]]></text>
+			</staticText>
+			<line>
+				<reportElement x="4" y="58" width="799" height="1"/>
+			</line>
+			<line>
+				<reportElement x="3" y="89" width="799" height="1"/>
+			</line>
+			<line>
+				<reportElement x="2" y="19" width="799" height="1"/>
+			</line>
+			<line>
+				<reportElement x="2" y="89" width="799" height="1"/>
+			</line>
+			<textField>
+				<reportElement x="170" y="38" width="268" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{pessoa_nome}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="7" y="0" width="400" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{produto_descricao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="401" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{itensvenda_valorprod}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="589" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{itensvenda_quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="701" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{itensvenda_subtotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="620" y="0" width="181" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{venda_valortotal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="601" y="0" width="48" height="20" forecolor="#000000"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<line>
+				<reportElement x="2" y="0" width="799" height="1"/>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="675" y="34" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="755" y="34" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="formulario">
+                <p:panel header="Gestão de Cargos">
+                    <h:outputLabel value="Campos com (*) obrigatórios " style="color: red"/>
+                    <p:fieldset legend="DADOS" style="background-color:  aliceblue; margin: 8px" >
+                        <h:panelGrid columns="2" style="padding: 8px">
+                            <h:outputLabel value="Descrição do Cargo*" style="font-weight: bolder"/>
+                            <p:inputText value="#{CargoMB.cargo.desc_cargo}" required="true" requiredMessage="Nome obrigatório" size="79"/>
+                            <h:outputLabel value="Nível de acesso*" style="font-weight: bolder"/>
+                            <p:selectOneMenu value="#{CargoMB.cargo.nivel_acesso}" required="true" requiredMessage="Nível de acesso obrigatório!">
+                                <f:selectItem itemLabel="Diretor" itemValue="5"/>
+                                <f:selectItem itemLabel="Gerente" itemValue="4"/>
+                                <f:selectItem itemLabel="Analista" itemValue="3"/>
+                                <f:selectItem itemLabel="Supervisor" itemValue="2"/>
+                                <f:selectItem itemLabel="Operador" itemValue="1"/>
+                            </p:selectOneMenu>                           
+                        </h:panelGrid>
+                    </p:fieldset>
+                </p:panel>
+                <p:commandButton value="salvar" action="#{CargoMB.salvar()}" ajax="false" icon="ui-icon-check"/>
+                <p:commandButton value="cancelar" action="/aplicacao/usuario/cargo/lista_cargo" actionListener="#{CargoMB.cancelar()}" ajax="false" immediate="true" icon="ui-icon-close"/>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</html>

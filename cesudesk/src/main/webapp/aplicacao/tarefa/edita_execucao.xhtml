@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="formulario">
+                <p:panel id="panel" menuTitle="Execuções da Triagem" header="Execuções da Triagem">
+                    <h:panelGrid columns="2" id="pdados">
+                        <h:outputText value="Início Execução"/>
+                        <p:calendar value="#{TriagemMB.execucao.dh_inicioexecucao}" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3"/>
+                        <h:outputText value="Fim Execução"/>
+                        <p:calendar value="#{TriagemMB.execucao.dh_fimexecucao}" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3"/>
+                        <h:outputText/>
+                        <p:commandButton id="btadd" value="Adicionar" icon="ui-icon-plus" actionListener="#{TriagemMB.addExecucao()}" update="@form"/>
+                        <h:outputText value="Resultado da Triagem"/>
+                        <p:inputTextarea cols="50" rows="4" value="#{TriagemMB.triagem.inf_resultadotriagem}" readonly="#{TriagemMB.resultado_triagem}"/>
+                    </h:panelGrid> 
+                </p:panel>
+                <p:panel header="Execuções Inseridas" styleClass="tb-exec">
+                    <p:dataTable id="tbexecucoes" value="#{TriagemMB.lista_execucoes}" var="ex"
+                                 styleClass="tb-exec" resizeMode="fit" sortBy="#{ex.dh_inicioexecucao}">
+                        <p:column headerText="ID Execução">
+                            <h:outputText value="#{ex.id}"/>
+                        </p:column>
+                        <p:column headerText="Início Execução">
+                            <h:outputText value="#{ex.dh_inicioexecucao}">
+                                <f:convertDateTime timeStyle="default" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Fim Execução">
+                            <h:outputText value="#{ex.dh_fimexecucao}">
+                                <f:convertDateTime timeStyle="default" pattern="dd/MM/yyyy HH:mm" timeZone="GMT-3"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column id="cremo" headerText="Ação">
+                            <p:commandButton value="Remover" actionListener="#{TriagemMB.removeExecucao}" update="@form">
+                                <f:attribute value="#{ex}" name="execucao"/>
+                            </p:commandButton>
+                        </p:column> 
+                    </p:dataTable>
+                </p:panel>
+                <p:commandButton  value="Salvar" actionListener="#{TriagemMB.salvar}" ajax="false" icon="ui-icon-sabe"/>
+                <p:commandButton value="Voltar" action="/aplicacao/tarefa/edita_triagem" ajax="false" icon="ui-icon-back"/>
+
+            </h:form>            
+        </ui:define>
+    </ui:decorate>
+</html>

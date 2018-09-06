@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <title>CESUDESK</title>
+        </h:head>
+        <h:body style="background-color: #C0C1C2;">
+            <p:growl id="messages" autoUpdate="true" showDetail="true" escape="true"/>
+            <h:form id="formLogin" style="background-color: #C0C1C2;}">
+                <div id="imagem-login">
+                    <p:graphicImage id="imglogin" value="/resources/images/logobrancop.png" style="opacity: 0.7; position: relative; left: 38.5%"/>
+                </div>
+                <div>
+                    <h:panelGrid columns="1" cellpadding="2" style="margin: 0 auto; background-color: white; outline: #80AAC4 groove 3px;font-family: Calibri; font-weight: 600;  color: #333333">
+                        <h:outputText value="Usuário"/> 
+                        <p:inputText id="login" value="#{LoginMB.login}" size="35">
+                            <p:watermark for="login" value="Login"/>
+                        </p:inputText>
+                        <h:outputText value="Senha"/>
+                        <p:password id="senha" value="#{LoginMB.senha}" size="35"> 
+                            <p:watermark for="senha" value="Senha"/>
+                        </p:password>
+                        <p:commandButton value="Entrar" action="#{LoginMB.login()}" icon="ui-icon-key"/>
+                        <h:outputText value="#{LoginMB.retorno}"/>
+                        <h:commandLink value="Esqueci minha credencial" style="left: 30%"/>
+                    </h:panelGrid>
+
+                </div>
+
+            </h:form>
+        </h:body> 
+    </f:view>
+</html>

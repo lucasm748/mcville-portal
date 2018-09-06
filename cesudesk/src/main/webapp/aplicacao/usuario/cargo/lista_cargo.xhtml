@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form prependId="false">
+                <p:messages id="messages"/>
+                <p:panel menuTitle="Cargos Cadastrados no Sistema" header="Cargos Cadastrados no Sistema">
+                    <p:dataTable value="#{CargoMB.lista}" var="u" paginator="true" 
+                                 rows="20" emptyMessage="Nenhum registro encontrado!" paginatorPosition="bottom">
+
+
+                        <p:column id="nomeheader" headerText="Cargo" filterBy="#{u.desc_cargo}" sortBy="#{u.desc_cargo}">
+                            <p:outputLabel value="#{u.desc_cargo}"/>
+                        </p:column>
+                        <p:column id="nivelheader" headerText="Nível de Acesso" filterBy="#{u.nivel_acesso}" sortBy="#{u.nivel_acesso}">
+                            <p:outputLabel value="#{u.nivel_acesso}"/>
+                        </p:column>
+
+                        <p:column headerText="Ações ">
+                            <p:commandButton action="/aplicacao/usuario/cargo/edita_cargo" value="Editar" actionListener="#{CargoMB.editar}" ajax="false" icon="ui-icon-pencil">
+                                <f:attribute name="cargo" value="#{u}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <p:commandButton value="Imprimir" onclick="window.print();" icon="ui-icon-print"/>
+                <p:commandButton value="Novo" action="/aplicacao/usuario/cargo/edita_cargo" actionListener="#{CargoMB.novo}" ajax="false" icon="ui-icon-plus"/>
+                <p:commandButton value="Voltar" action="/index" ajax="false" immediate="true" icon="ui-icon-arrowreturn-1-w"/>  
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</html>

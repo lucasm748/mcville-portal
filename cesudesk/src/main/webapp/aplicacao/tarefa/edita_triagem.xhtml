@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="formulario">
+                <p:panel id="panel" menuTitle="Triagens do Ticket" header="Triagens do Ticket">
+                    <p:dataTable id="tbtriagens" value="#{TriagemMB.triagens_tarefa}" var="item" emptyMessage="Não há itens" paginator="true" 
+                                 paginatorPosition="bottom" rows="6" selectionMode="single" selection="#{botoesMB.itemselecionado}" rowKey="#{item.idTriagem}" 
+                                 widgetVar="triagensTable" scrollable="true" scrollRows="10">
+                        <p:ajax event="rowSelect" listener="#{botoesMB.onRowSelect}"   
+                                update="@form"/>  
+                        <p:ajax event="rowUnselect" listener="#{botoesMB.onRowUnselect}" 
+                                update="@form"/>  
+                        <p:column headerText="ID" style="width: 5%;overflow: hidden">
+                            <h:outputText value="#{item.idTriagem}"/>
+                        </p:column>
+                        <p:column headerText="Usuario" style="width: 12%;overflow: hidden">
+                            <h:outputText value="#{item.usuario.nm_usuario}"/>
+                        </p:column>
+                        <p:column headerText="Descrição da Triagem" style="width: 25%;overflow: hidden">
+                            <h:outputText value="#{item.desc_triagem}"/>
+                        </p:column>
+                        <p:column headerText="Data Início" style="width: 12%;overflow:hidden">
+                            <h:outputText value="22/11/2014 08:00"/>
+                        </p:column>
+                        <p:column headerText="Tempo Gasto" style="width:10%; overflow: hidden">
+                            <h:outputText value="#{item.qt_horas_triagem}"/>
+                        </p:column>
+                        <p:column headerText="Status" style="width:10%;overflow: hidden">
+                            <h:outputText value="#{item.tp_statustriagem}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>    
+                <p:panel id="pbotoes">
+                    <p:commandButton id="btdetalhar" value="Detalhar" action="/aplicacao/tarefa/edita_execucao" actionListener="#{TriagemMB.editar}" icon="ui-icon-contact" rendered="true" ajax="false">
+                        <f:attribute name="triagem" value="#{botoesMB.itemselecionado}"/>
+                        <f:attribute name="”collectionType”" value="”java.util.ArrayList”/"/>
+                    </p:commandButton>
+                    <p:commandButton id="btagora" value="Iniciar Agora"  actionListener="#{TriagemMB.getIniciarAgora}" icon="ui-icon-play" rendered="#{botoesMB.btIniciarAgora}">
+                        <f:attribute name="triagem" value="#{botoesMB.itemselecionado}"/>
+                        <f:attribute name="”collectionType”" value="”java.util.ArrayList”/"/>
+                    </p:commandButton>
+                    <p:commandButton id="btapos" value="Iniciar Após" icon="ui-icon-play" rendered="#{botoesMB.btIniciarApos}"/>
+                    <p:commandButton id="btpausar" value="Pausar Triagem" actionListener="#{TriagemMB.getPausar}" icon="ui-icon-pause" rendered="#{botoesMB.btPausar}" update="@form">
+                        <f:attribute name="triagem" value="#{botoesMB.itemselecionado}"/>
+                        <f:attribute name="”collectionType”" value="”java.util.ArrayList”/"/>
+                    </p:commandButton>
+                    <p:commandButton id="btencerrar" value="Encerrar" icon="ui-icon-stop" rendered="#{botoesMB.btEncerrar}" actionListener="#{TriagemMB.getEncerrar}"  action="/aplicacao/tarefa/edita_execucao" ajax="false">
+                        <f:attribute name="triagem" value="#{botoesMB.itemselecionado}"/>
+                        <f:attribute name="”collectionType”" value="”java.util.ArrayList”/"/>
+                    </p:commandButton>
+                    <p:commandButton id="btvoltar" value="Voltar" action="/aplicacao/tarefa/minhas_tarefas" actionListener="#{TarefaMB.novo()}" ajax="false" icon="ui-icon-arrowreturn-1-w"/>
+                </p:panel>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</html>

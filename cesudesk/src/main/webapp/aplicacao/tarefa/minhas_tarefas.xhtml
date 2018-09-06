@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="formulario">
+                <p:panel id="panel" menuTitle="Meus Tickets" header="Meus Tickets">
+                    <p:dataTable value="#{TriagemMB.atribuidas_usuario}" var="tar" paginator="true" 
+                                 rows="20" emptyMessage="Nenhum registro encontrado!" paginatorPosition="bottom"
+                                 selectionMode="single" selection="#{TarefaMB.tarefaSelecionada}" rowKey="#{tar.cd_tarefa}" 
+                                 widgetVar="tarefasTable" scrollable="true" scrollRows="20">
+                        <p:ajax event="rowSelect" listener="#{TarefaMB.onRowSelect}"   
+                                update="@form"/>  
+                        <p:ajax event="rowUnselect" listener="#{TarefaMB.onRowUnselect}" 
+                                update="@form"/>  
+                        <p:column headerText="Código" filterable="true" filterBy="#{tar.cd_tarefa}" sortable="true"
+                                  sortBy="#{tar.cd_tarefa}">
+                            <h:outputText value="#{tar.cd_tarefa}"/>
+                        </p:column>
+                        <p:column headerText="Data Cadastro" sortBy="#{tar.dh_cadastro}" sortable="true">
+                            <h:outputText value="#{tar.dh_cadastro}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00"/>  
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Título" sortable="true" filterable="true" filterBy="#{tar.titulo}">
+                            <h:outputText value="#{tar.titulo}"/>
+                        </p:column>
+                        <p:column headerText="Solicitante" sortable="true" filterBy="#{tar.solicitante.nm_usuario}">
+                            <h:outputText value="#{tar.solicitante.nm_usuario}"/>
+                        </p:column>
+                        <p:column headerText="Módulo" sortable="true" filterBy="#{tar.modulo.desc_modulo}" sortBy="#{tar.modulo.desc_modulo}">
+                            <h:outputText value="#{tar.modulo.desc_modulo}"/>
+                        </p:column>
+                        <p:column headerText="Tipo" sortable="true" filterBy="#{tar.tipotarefa.desc_tipotarefa}" sortBy="#{tar.tipotarefa.desc_tipotarefa}">
+                            <h:outputText value="#{tar.tipotarefa.desc_tipotarefa}"/>
+                        </p:column>
+
+                    </p:dataTable>  
+                </p:panel>    
+                <p:commandButton value="Triagens" actionListener="#{TriagemMB.getCarregar_tarefa}" action="/aplicacao/tarefa/edita_triagem"
+                                 icon="ui-icon-folder-open"  rendered="#{TarefaMB.btDetalhar}" ajax="false">
+                    <f:attribute name="tarefa" value="#{TarefaMB.itemSelecionado}"/>
+                    <f:attribute name="”collectionType”" value="”java.util.ArrayList”/"/>
+                </p:commandButton>
+                <p:commandButton value="Voltar" action="/index" actionListener="#{TarefaMB.novo()}"
+                                 icon="ui-icon-arrowreturn-1-w"  ajax="false" immediate="true"/>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</html>

@@ -7,14 +7,21 @@
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
-            <groupId>hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>3.4.0.GA</version>
-        </dependency>
-        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>4.3.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.4.1212.jre7</version>
+            <type>tar.gz</type>
+            <classifier>dist</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.sodeac</groupId>
+            <artifactId>org.sodeac.dbschema.driver.postgresql</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
     <properties>

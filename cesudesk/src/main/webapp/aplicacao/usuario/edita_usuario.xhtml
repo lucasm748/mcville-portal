@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="formulario">
+                <p:panel header="Gestão de Pessoas - Usuários">
+                    <h:outputLabel value="Campos com (*) obrigatórios " style="color: red"/>
+
+                    <p:fieldset legend="DADOS" style="background-color:  aliceblue; margin: 8px" >
+
+                        <h:panelGrid columns="2" style="padding: 8px">
+
+                            <h:outputLabel value="Nome*" style="font-weight: bolder"/>
+                            <p:inputText value="#{UsuarioMB.usuario.nm_pessoa}" required="true" requiredMessage="Nome obrigatório" size="79"/>
+                            <h:outputLabel value="Login*" style="font-weight: bolder"/>
+                            <p:inputText value="#{UsuarioMB.usuario.nm_usuario}" required="true" requiredMessage="Login obrigatório" size="79"/>
+                            <h:outputText value="Senha*"/>
+                            <p:password value="#{UsuarioMB.usuario.senha_usuario}" required="true"/>
+                            <h:outputText value="Cargo*"/>
+                            <p:selectOneMenu value="#{UsuarioMB.usuario.cargo}" converter="#{UsuarioMB.cargoConverter}" required="true" requiredMessage="Selecione o estado">
+                                <f:selectItems value="#{UsuarioMB.cargos}"/>
+                            </p:selectOneMenu>
+                            <h:outputLabel value="Ativo?*" style="font-weight: bolder"/>
+                            <p:selectOneMenu value="#{UsuarioMB.usuario.ativo}" required="true" requiredMessage="Nível de acesso obrigatório!">
+                                <f:selectItem itemLabel="SIM" itemValue="true"/>
+                                <f:selectItem itemLabel="NÃO" itemValue="false"/>
+                            </p:selectOneMenu>
+
+                        </h:panelGrid>
+                    </p:fieldset>
+                </p:panel>
+                <p:commandButton value="salvar" action="#{UsuarioMB.salvar()}" ajax="false" icon="ui-icon-check"/>
+                <p:commandButton value="cancelar" action="/aplicacao/usuario/lista_usuario" actionListener="#{UsuarioMB.cancelar}" ajax="false" immediate="true" icon="ui-icon-close"/>
+
+            </h:form>
+
+        </ui:define>
+
+    </ui:decorate>
+</html>

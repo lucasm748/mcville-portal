@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="formulario">
+                <p:panel id="pinicial" menuTitle="Gestão de Tarefas" header="Gestão de Tarefas">
+                    <p:wizard id="panelwizard" backLabel="Voltar" nextLabel="Avançar" style="min-height: 400px" >
+                        <p:tab id="tbdados" title="Dados Iniciais">
+                            <h:panelGrid id="panel1" columns="4" style="padding: 5px">
+                                <h:outputText value="Código"/>
+                                <h:outputText value="#{TarefaMB.tarefa.cd_tarefa}"/><h:outputText/><h:outputText/>
+                                <h:outputText value="Data do Cadastro*"/>
+                                <p:inputText value="#{TarefaMB.tarefa.dh_cadastro}" readonly="true">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00"/>  
+                                </p:inputText> <h:outputText/><h:outputText/>
+                                <h:outputText value="Data para Entrega"/>
+                                <p:calendar value="#{TarefaMB.tarefa.dh_entrega_prev}" required="true" requiredMessage="Data é obrigatória" /><h:outputText/><h:outputText/>
+                                <h:outputText value="Solicitante"/>
+                                <p:selectOneMenu value="#{TarefaMB.tarefa.solicitante}" converter="#{TarefaMB.usuarioConverter}" required="true" requiredMessage="Informe o solicitante" >
+                                    <f:selectItem itemValue="0" itemLabel="Selecione um usuário"/>
+                                    <f:selectItems value="#{TarefaMB.usuarios}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </p:tab>
+                        <p:tab id="triagem" title="Triagem">
+                            <h:panelGrid columns="2" style="width: 50%">
+                                <h:outputText value="Selecionar Usuário" style="font-weight: bolder"/>
+                                <p:selectOneMenu value="#{TarefaMB.triagem.usuario}" converter="#{TarefaMB.usuarioConverter}" style="width: 50%;overflow: hidden">
+                                    <f:selectItem itemValue="0" itemLabel="Selecionar Usuário"/>
+                                    <f:selectItems value="#{TarefaMB.usuarios}"/>
+                                </p:selectOneMenu>
+                                <p:commandButton value="Incluir" actionListener="#{TarefaMB.addTriagem()}" update="tbtriagens" icon="ui-icon-plus" ajax="false"/>
+                                <h:outputText/>
+                            </h:panelGrid>
+                            <h:outputText value="Triagens da Tarefa" style="font-weight: bolder"/>
+                            <p:dataTable id="tbtriagens" value="#{TarefaMB.lista_triagens}" var="item" emptyMessage="Não há itens" paginator="true" paginatorPosition="bottom" rows="6" style="max-width: 550px;min-width: 550px;">
+                                <p:column headerText="ID" style="width: 5%;overflow: hidden">
+                                    <h:outputText value="#{item.idTriagem}"/>
+                                </p:column>
+                                <p:column headerText="Usuario" style="width: 12%;overflow: hidden">
+                                    <h:outputText value="#{item.usuario.nm_usuario}"/>
+                                </p:column>
+                                <p:column headerText="Status" style="width:10%;overflow: hidden">
+                                    <h:outputText value="#{item.tp_statustriagem}"/>
+                                </p:column>
+                                <p:column headerText="Tempo Gasto" style="width:10%; overflow: hidden">
+                                    <h:outputText value="#{item.qt_horas_triagem}"/>
+                                </p:column>
+                                <p:column headerText="Resultado da Triagem" style="width: 25%;overflow: hidden">
+                                    <h:outputText value="#{item.inf_resultadotriagem}"/>
+                                </p:column>
+                                <p:column headerText="Ações" style="width: 15%;overflow: hidden">
+                                    <p:commandButton value="Remover Triagem" actionListener="#{TarefaMB.removerTriagem}" update="tbtriagens" icon="ui-icon-close" immediate="true">
+                                        <f:attribute name="triagem" value="#{item}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+
+                        </p:tab>
+                        <p:tab id="descricao" title="Dados da Solicitação">
+                            <h:panelGrid columns="2" id="pgdados">
+                                <h:outputText value="Módulo"/>
+                                <p:selectOneMenu value="#{TarefaMB.tarefa.modulo}" converter="#{TarefaMB.moduloConverter}" required="true" requiredMessage="O módulo deve ser informado."> 
+                                    <f:selectItem itemValue="0" itemLabel="Selecione uma opção"/>
+                                    <f:selectItems value="#{TarefaMB.modulos_tarefa}"/>
+                                </p:selectOneMenu>
+                                <h:outputText value="Tipo de Tarefa"/>
+                                <p:selectOneMenu value="#{TarefaMB.tarefa.tipotarefa}" converter="#{TarefaMB.tipoTarefaConverter}" required="true" requiredMessage="O tipo de tarefa deve ser informado."> 
+                                    <f:selectItem itemValue="0" itemLabel="Selecione uma opção"/>
+                                    <f:selectItems value="#{TarefaMB.tipos_tarefa}"/>
+                                </p:selectOneMenu>
+                                <h:outputText value="Título (Resumo da solicitação)*"/>
+                                <p:inputText value="#{TarefaMB.tarefa.titulo}" size="50"/>
+                                <h:outputText value="Informações Adicionais" style="font-weight: bold"/>
+                                <p:inputTextarea maxlength="500" cols="50" rows="5" id="infocompl" value="#{TarefaMB.tarefa.inf_complementar}"/>
+                                <br/>
+                            </h:panelGrid>
+                        </p:tab>
+
+                        <p:tab id="anexos" title="Anexos">
+                            <h:panelGrid columns="2" id="tbanexos">
+
+                            </h:panelGrid>
+                        </p:tab>
+
+                    </p:wizard>
+                </p:panel>    
+                <p:commandButton value="Salvar" action="#{TarefaMB.salvar()}"  ajax="false"/>
+                <p:commandButton value="Cancelar" action="/aplicacao/tarefa/lista_tarefa" actionListener="#{TarefaMB.novo}" ajax="false" icon="ui-icon-arrowreturn-1-w" immediate="true"/>
+            </h:form>            
+        </ui:define>
+    </ui:decorate>
+</html>

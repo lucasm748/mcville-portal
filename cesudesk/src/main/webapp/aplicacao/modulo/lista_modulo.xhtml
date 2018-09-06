@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form prependId="false">
+                <p:messages id="messages"/>
+                <p:panel menuTitle="Modulos Cadastrados no Sistema" header="Modulos Cadastrados no Sistema">
+                    <p:dataTable value="#{ModuloMB.lista}" var="u" paginator="true" 
+                                 rows="20" emptyMessage="Nenhum registro encontrado!" paginatorPosition="bottom">
+
+
+                        <p:column id="nomeheader" headerText="Código do Modulo" filterBy="#{u.cd_modulo}" sortBy="#{u.cd_modulo}">
+                            <h:outputText value="#{u.cd_modulo}"/>
+                        </p:column>
+                        <p:column id="nivelheader" headerText="Descrição" filterBy="#{u.desc_modulo}" sortBy="#{u.desc_modulo}">
+                            <h:outputText value="#{u.desc_modulo}"/>
+                        </p:column>
+
+                        <p:column headerText="Ações ">
+                            <p:commandButton action="/aplicacao/modulo/edita_modulo" value="Editar" actionListener="#{ModuloMB.editar}" ajax="false" icon="ui-icon-pencil">
+                                <f:attribute name="modulo" value="#{u}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <p:commandButton value="Imprimir" onclick="window.print();" icon="ui-icon-print"/>
+                <p:commandButton value="Novo" action="/aplicacao/modulo/edita_modulo" actionListener="#{ModuloMB.novo}" ajax="false" icon="ui-icon-plus"/>
+                <p:commandButton value="Voltar" action="/index" ajax="false" immediate="true" icon="ui-icon-arrowreturn-1-w"/>  
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</html>

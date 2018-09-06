@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="formulario">
+                <p:growl id="messages"/>
+                <p:panel id="panel" menuTitle="Tarefas" header="Gestão das Tarefas">
+                    <p:dataTable value="#{TarefaMB.lista}" var="t" paginator="true" 
+                                 rows="20" emptyMessage="Nenhum registro encontrado!"
+                                 paginatorPosition="bottom" selectionMode="single" selection="#{TarefaMB.tarefaSelecionada}" rowKey="#{t.cd_tarefa}" 
+                                 widgetVar="tarefasTable" scrollable="true" scrollRows="20">
+                        <p:ajax event="rowSelect" listener="#{TarefaMB.onRowSelect}"   
+                                update="@form"/>  
+                        <p:ajax event="rowUnselect" listener="#{TarefaMB.onRowUnselect}" 
+                                update="@form"/>  
+
+                        <p:column id="idheader" headerText="Código"
+                                  style="width: 12%;overflow: hidden" sortBy="#{t.cd_tarefa}" filterBy="#{t.cd_tarefa}">
+                            <h:outputText value="#{t.cd_tarefa}"/>
+                        </p:column>
+
+                        <p:column id="nomeheader" headerText="Solicitante" 
+                                  style="width:15%; overflow: hidden" filterBy="#{t.solicitante.nm_usuario}">
+                            <h:outputText value="#{t.solicitante.nm_usuario}"/>
+                        </p:column>
+                        <p:column id="titulo" headerText="Descrição" style="width: 30%;overflow: hidden">
+                            <h:outputText value="#{t.titulo}"/>
+                        </p:column>
+                        <p:column id="dhabertura" headerText="Data Abertura"  style="width: 12%; overflow: hidden" filterBy="#{t.dh_cadastro}" sortBy="#{t.dh_cadastro}" filterMatchMode="contains">
+                            <h:outputText value="#{t.dh_cadastro}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="GMT-03:00"/>  
+                            </h:outputText> 
+                        </p:column>
+                        <p:column id="prioridade" headerText="Prioridade"  style="width: 8%; overflow: hidden" sortBy="#{t.prioridade}">
+                            <h:outputText value="#{TarefaMB.tarefa.prioridade}"/>
+                        </p:column>
+                        <p:column id="tpstatus" headerText="Status"  style="width: 8%; overflow: hidden">
+                            <h:outputText value="#{t.tp_statustarefa}"/>
+                        </p:column>
+                    </p:dataTable>  
+                </p:panel>    
+                <p:commandButton id="btnovo" value="Nova Tarefa" action="/aplicacao/tarefa/edita_tarefa" 
+                                 actionListener="#{TarefaMB.novo()}" ajax="false" icon="ui-icon-plus" type="submit"/>
+                <p:commandButton id="bteditar"  value="Editar"  rendered="#{TarefaMB.btDetalhar}" 
+                                 icon="ui-icon-pencil" action="/aplicacao/tarefa/edita_tarefa" actionListener="#{TarefaMB.getEditar}" ajax="false">
+                    <f:attribute name="tarefa" value="#{TarefaMB.tarefaSelecionada}"/>
+                    <f:attribute name="”collectionType”" value="”java.util.ArrayList”/"/>
+                </p:commandButton>
+                <p:commandButton value="Voltar" action="/index" actionListener="#{TarefaMB.novo()}" ajax="false" icon="ui-icon-arrowreturn-1-w"/>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</html>

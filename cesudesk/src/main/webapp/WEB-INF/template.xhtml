@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <title>Cesudesk - Service Desk</title>
+            <META HTTP-EQUIV="EXPIRES" CONTENT="0" />      
+            <META HTTP-EQUIV="pragma" CONTENT="nocache" />  
+            <meta http-equiv="cache-control"   content="no-cache"/>
+            <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+            <link href="#{request.contextPath}/resources/estilos.css" rel="stylesheet" type="text/css"/>
+        </h:head>
+        <h:body>
+            <p:growl id="messages1" autoUpdate="true" showDetail="true"/>
+            <div id="pagina" class="pagina-div">
+                <div id="header" class="header-div">
+                    <ui:insert name="header">
+                        <ui:include src="/template/template_header.xhtml"/>
+                     </ui:insert>
+                </div>
+                <div id="content" class="content-div">
+                    <ui:insert name="content">
+                        <ui:include src="/template/template_content.xhtml"/>
+                    </ui:insert>
+
+                </div>
+                <div id="footer" class="footer-div">
+                    <ui:insert name="footer">
+                        <ui:include src="/template/template_footer.xhtml"/>
+                    </ui:insert>
+
+                </div>
+
+            </div>
+        </h:body>
+    </f:view>
+</html> 

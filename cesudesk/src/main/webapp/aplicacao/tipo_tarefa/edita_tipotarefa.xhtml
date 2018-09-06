@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form id="formulario">
+                <p:panel header="Gestão de Tipos de Tarefas">
+                    <h:outputLabel value="Campos com (*) obrigatórios " style="color: red"/>
+                    <p:fieldset legend="DADOS" style="background-color:  aliceblue; margin: 8px" >
+                        <h:panelGrid columns="2" style="padding: 8px">
+                            <h:outputLabel value="Descrição do Tipo de Tarefa*" style="font-weight: bolder"/>
+                            <p:inputText value="#{TipoTarefaMB.tipoTarefa.desc_tipotarefa}" required="true" requiredMessage="Nome obrigatório" size="79"/>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </p:panel>
+                <p:commandButton value="salvar" action="#{TipoTarefaMB.salvar()}" ajax="false" icon="ui-icon-check"/>
+                <p:commandButton value="cancelar" action="/aplicacao/tipo_tarefa/lista_tipotarefa" actionListener="#{TipoTarefaMB.cancelar()}" ajax="false" immediate="true" icon="ui-icon-close"/>
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</html>

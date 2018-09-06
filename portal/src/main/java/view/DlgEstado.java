@@ -5,6 +5,13 @@
  */
 package view;
 
+import dao.EstadoDAO;
+import entity.Estado;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author MC Ville
@@ -14,9 +21,109 @@ public class DlgEstado extends javax.swing.JDialog {
     /**
      * Creates new form DlgEstado
      */
+    private List<Estado> listaEst = new ArrayList<Estado>();
+    private Estado est;
+    private EstadoDAO dao;
+
     public DlgEstado(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+        //   super(parent, modal);
         initComponents();
+        dao = new EstadoDAO();
+        montaTabela();
+        validaBotoes("inicio");
+    }
+
+    public void validaBotoes(String acao) {
+        if (acao.equals("inicio")) {
+            //setEnabled habilita ou desabilita o botão ou tabela.
+            bt_novo.setEnabled(true);
+            bt_salvar.setEnabled(false);
+            bt_excluir.setEnabled(false);
+            bt_editar.setEnabled(false);
+            bt_cancelar.setEnabled(false);
+            //setEditable habilita ou desabilita os campos.
+            f_nome.setEnabled(false);
+            f_sigla.setEnabled(false);
+            f_codigo.setEnabled(false);
+            tb_dados.setEnabled(true);
+            f_filtro.setEnabled(true);
+        } else if (acao.equals("novo") || acao.equals("alterar")) {
+            bt_novo.setEnabled(false);
+            bt_salvar.setEnabled(true);
+            bt_excluir.setEnabled(false);
+            bt_editar.setEnabled(false);
+            bt_cancelar.setEnabled(true);
+            f_nome.setEnabled(true);
+            f_sigla.setEnabled(true);
+            f_codigo.setEnabled(false);
+            tb_dados.setEnabled(false);
+            f_filtro.setEnabled(false);
+        } else if (acao.equals("selecionado")) {
+            bt_novo.setEnabled(true);
+            bt_salvar.setEnabled(false);
+            bt_excluir.setEnabled(true);
+            bt_editar.setEnabled(true);
+            bt_cancelar.setEnabled(false);
+            f_nome.setEnabled(false);
+            f_sigla.setEnabled(false);
+            f_codigo.setEnabled(false);
+            tb_dados.setEnabled(true);
+            f_filtro.setEnabled(true);
+        }
+    }
+
+    public void limpaCampos() {
+        //seta o texto do campo como vazio.
+        f_nome.setText("");
+        //seta o item selecionado como null. Limpa a combo.
+        f_sigla.setText("");
+        f_codigo.setText("");
+    }
+
+    /**
+     * **********ÚTIL**********************************************************
+     */
+    //Valida os campos obrigatórios de um cadastro, 
+    //retornando um boolean true quando verdadeiro ou false quando tiver algum campo em branco.
+    public Boolean validaCampos() {
+        if (f_nome.getText().equals("")) {
+            //exibe uma mensagem para o usuario.
+            JOptionPane.showMessageDialog(null, "O campo nome do Estado é obrigatório!");
+            f_nome.grabFocus();
+            return false;
+
+        }
+        if (f_sigla.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "O campo Sigla deve ser preenchido!");
+            f_sigla.grabFocus();
+            return false;
+        } else {
+
+            return true;
+        }
+    }
+
+    public void montaTabela() {
+        if (c_tipo.getSelectedIndex() == 0) {
+            listaEst = dao.lista_filtrando("id", f_filtro.getText());
+        } else if (c_tipo.getSelectedIndex() == 1) {
+            listaEst = dao.lista_filtrando("nome", f_filtro.getText());
+        } else {
+            listaEst = dao.lista_filtrando("sigla", f_filtro.getText());
+        }
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        modelo.addColumn("ID");
+        modelo.addColumn("Nome");
+        modelo.addColumn("Sigla");
+        for (Estado est : listaEst) {
+            modelo.addRow(new Object[]{est.getId(), est.getNome(), est.getSigla()});
+        }
+        tb_dados.setModel(modelo);
     }
 
     /**
@@ -29,36 +136,124 @@ public class DlgEstado extends javax.swing.JDialog {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tb_dados = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        f_nome = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        f_sigla = new javax.swing.JTextField();
+        bt_novo = new javax.swing.JButton();
+        bt_editar = new javax.swing.JButton();
+        bt_cancelar = new javax.swing.JButton();
+        bt_salvar = new javax.swing.JButton();
+        bt_excluir = new javax.swing.JButton();
+        f_filtro = new javax.swing.JTextField();
+        bt_filtrar = new javax.swing.JButton();
+        f_codigo = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        c_tipo = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tb_dados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Código", "Nome", "Sigla"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tb_dados.setName("tb_dados"); // NOI18N
+        tb_dados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tb_dadosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tb_dados);
 
         jLabel1.setText("Nome");
 
+        f_nome.setName("f_nome"); // NOI18N
+
         jLabel2.setText("Sigla");
 
-        jButton1.setText("Salvar");
+        f_sigla.setName("f_sigla"); // NOI18N
 
-        jButton2.setText("Cancelar");
+        bt_novo.setText("Novo");
+        bt_novo.setName("bt_novo"); // NOI18N
+        bt_novo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_novoActionPerformed(evt);
+            }
+        });
+
+        bt_editar.setText("Editar");
+        bt_editar.setName("bt_editar"); // NOI18N
+        bt_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_editarActionPerformed(evt);
+            }
+        });
+
+        bt_cancelar.setText("Cancelar");
+        bt_cancelar.setName("bt_cancelar"); // NOI18N
+        bt_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_cancelarActionPerformed(evt);
+            }
+        });
+
+        bt_salvar.setText("Salvar");
+        bt_salvar.setName("bt_salvar"); // NOI18N
+        bt_salvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_salvarActionPerformed(evt);
+            }
+        });
+
+        bt_excluir.setText("Excluir");
+        bt_excluir.setName("bt_excluir"); // NOI18N
+        bt_excluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_excluirActionPerformed(evt);
+            }
+        });
+
+        bt_filtrar.setText("Filtrar");
+        bt_filtrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_filtrarActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Código");
+
+        c_tipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Código", "Nome ", "Sigla" }));
+        c_tipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                c_tipoActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Filtar por");
+
+        jLabel5.setText("Filtro");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -70,39 +265,162 @@ public class DlgEstado extends javax.swing.JDialog {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(c_tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(f_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bt_filtrar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(f_nome, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(f_sigla, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bt_novo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bt_editar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bt_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bt_salvar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bt_excluir, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(f_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                    .addComponent(bt_novo)
+                    .addComponent(bt_editar)
+                    .addComponent(bt_cancelar)
+                    .addComponent(bt_salvar)
+                    .addComponent(bt_excluir))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(f_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(f_nome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(f_sigla, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(c_tipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(f_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bt_filtrar))
+                .addGap(9, 9, 9)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bt_novoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_novoActionPerformed
+        est = new Estado();
+        limpaCampos();
+        validaBotoes("novo");
+        f_nome.grabFocus();
+    }//GEN-LAST:event_bt_novoActionPerformed
+
+    private void bt_salvarActionPerformed(java.awt.event.ActionEvent evt) {
+        if (validaCampos() == true) {
+            est = new Estado();
+            if (f_codigo.getText().equals("")) {
+                est.setId(null);
+            } else {
+                est.setId(Long.parseLong(f_codigo.getText()));
+            }
+            est.setNome(f_nome.getText());
+            est.setSigla(f_sigla.getText());
+            dao.merge(est);
+            f_nome.setText("");
+            f_sigla.setText("");
+            f_codigo.setText("");
+            montaTabela();
+            validaBotoes("inicio");
+
+            // TODO add your handling code here:
+        }
+    }
+
+    private void c_tipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_tipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_tipoActionPerformed
+
+    private void bt_filtrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_filtrarActionPerformed
+        montaTabela();
+    }//GEN-LAST:event_bt_filtrarActionPerformed
+
+    private void bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_editarActionPerformed
+        est = listaEst.get(tb_dados.getSelectedRow());
+        f_codigo.setText(String.valueOf(est.getId()));
+        f_nome.setText(est.getNome());
+        f_sigla.setText(est.getSigla());
+        validaBotoes("alterar");
+    }//GEN-LAST:event_bt_editarActionPerformed
+
+    private void tb_dadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_dadosMouseClicked
+        validaBotoes("selecionado");
+        //Recupero o objeto selecionado na tabela e atribuo no atributo global cid.
+        est = listaEst.get(tb_dados.getSelectedRow());
+        //Pego os valores dos atributos do objeto cid selecionado e preencho os campos com seus respectivos valores.
+        f_codigo.setText(String.valueOf(est.getId()));
+        f_nome.setText(est.getNome());
+        f_sigla.setText(est.getSigla());
+    }//GEN-LAST:event_tb_dadosMouseClicked
+
+    private void bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cancelarActionPerformed
+        limpaCampos();
+        validaBotoes("inicio");
+    }//GEN-LAST:event_bt_cancelarActionPerformed
+
+    private void bt_excluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_excluirActionPerformed
+        int i = (JOptionPane.showConfirmDialog(null, "Deseja exluir o registro?",
+                "Atenção", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null));
+
+        if (i == 0) {
+            setEst(listaEst.get(tb_dados.getSelectedRow()));
+            int x = dao.remove(est);
+            if(x < 1){
+                JOptionPane.showMessageDialog(null,"Erro ao remover, o objeto possui vínculos");
+            }
+            montaTabela();
+        } else if (i == 1) {
+            limpaCampos();
+            validaBotoes("inicio");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro crítico");
+            limpaCampos();
+            validaBotoes("inicio");
+        }
+    }//GEN-LAST:event_bt_excluirActionPerformed
+    public void setEst(Estado est) {
+        this.est = est;
+    }
 
     /**
      * @param args the command line arguments
@@ -147,13 +465,23 @@ public class DlgEstado extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton bt_cancelar;
+    private javax.swing.JButton bt_editar;
+    private javax.swing.JButton bt_excluir;
+    private javax.swing.JButton bt_filtrar;
+    private javax.swing.JButton bt_novo;
+    private javax.swing.JButton bt_salvar;
+    private javax.swing.JComboBox<String> c_tipo;
+    private javax.swing.JTextField f_codigo;
+    private javax.swing.JTextField f_filtro;
+    private javax.swing.JTextField f_nome;
+    private javax.swing.JTextField f_sigla;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTable tb_dados;
     // End of variables declaration//GEN-END:variables
 }

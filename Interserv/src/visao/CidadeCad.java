@@ -1,0 +1,545 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/*
+ * CidadeCad.java
+ *
+ * Created on 25/07/2011, 20:39:45
+ */
+package visao;
+
+import modelo.Cidade;
+import modelo.Estado;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import controle.CidadeControle;
+import controle.EstadoControle;
+
+/**
+ *
+ * @author Jaime
+ */
+public final class CidadeCad extends javax.swing.JDialog {
+
+    private List<Cidade> listaCid = new ArrayList<Cidade>();
+    private List<Estado> listaEst = new ArrayList<Estado>();
+    //Objeto global do cadastro.
+    private Cidade cid;
+    private Estado est;
+    private CidadeControle controle;
+    private EstadoControle econtrole;
+
+   
+    public void validaBotoes(String acao) {
+        if (acao.equals("inicio")) {
+            //setEnabled habilita ou desabilita o botão ou tabela.
+            btNovo.setEnabled(true);
+            btSalvar.setEnabled(false);
+            btExcluir.setEnabled(false);
+            btAlterar.setEnabled(false);
+            btCancelar.setEnabled(false);
+            btSair.setEnabled(true);
+            //setEditable habilita ou desabilita os campos.
+            campoNome.setEditable(false);
+            comboCidade.setEnabled(false);
+            painelTabela.setEnabled(false);
+            fFIltro.setEnabled(true);
+            tabela.setEnabled(true);
+        } else if (acao.equals("novo") || acao.equals("alterar")) {
+            btNovo.setEnabled(false);
+            btSalvar.setEnabled(true);
+            btExcluir.setEnabled(false);
+            btAlterar.setEnabled(false);
+            btCancelar.setEnabled(true);
+            btSair.setEnabled(false);
+            campoNome.setEditable(true);
+            comboCidade.setEnabled(true);
+            painelTabela.setEnabled(false);
+            tabela.setEnabled(false);
+            fFIltro.setEnabled(false);
+        } else if (acao.equals("selecionado")) {
+            btNovo.setEnabled(true);
+            btSalvar.setEnabled(false);
+            btExcluir.setEnabled(true);
+            btAlterar.setEnabled(true);
+            btCancelar.setEnabled(true);
+            btSair.setEnabled(true);
+            campoNome.setEditable(false);
+            comboCidade.setEnabled(false);
+            painelTabela.setEnabled(true);
+            tabela.setEnabled(true);
+            fFIltro.setEnabled(true);
+        }
+    }
+
+    //Valida os campos obrigatórios de um cadastro, 
+    //retornando um boolean true quando verdadeiro ou false quando tiver algum campo em branco.
+    public Boolean validaCampos() {
+        if (campoNome.getText().equals("")) {
+            //exibe uma mensagem para o usuario.
+            JOptionPane.showMessageDialog(null, "O campo nome da cidade é obrigatório!");
+            return false;
+        } else if (comboCidade.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(null, "A combo estado é obrigatório!");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // Monta uma combo com seus itens.
+    public void montaCombo() {
+        comboCidade.removeAllItems();
+        listaEst = econtrole.listaTodos();
+        for (Estado e : listaEst) {
+            comboCidade.addItem(e.getNome() + " - " + e.getSigla());
+        }
+
+    }
+
+    public Cidade getCid() {
+        return cid;
+    }
+
+    public void setCid(Cidade cid) {
+        this.cid = cid;
+    }
+
+    public List<Cidade> getListaCid() {
+        return listaCid;
+    }
+
+    public void setListaCid(List<Cidade> listaCid) {
+        this.listaCid = listaCid;
+    }
+
+    //Método construtor, método com mesmo nome da Classe, é o primeiro método a ser
+    //executado quando abrimos a tela.
+    public CidadeCad(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        controle = CidadeControle.getInstance();
+        econtrole = EstadoControle.getInstance();
+        montaTabela();
+        icones();
+        //monta a combo de estado.
+        montaCombo();
+        //valida os botões com a ação inicio.
+        validaBotoes("inicio");
+    }
+
+    //Monta a tabela com todas as cidades cadastradas no banco.
+    public void montaTabela() {
+        listaCid = controle.listaFiltrando(fFIltro.getText(), comboTipo.getSelectedIndex());
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("Nome");
+        modelo.addColumn("Estado");
+        for (Cidade cid : listaCid) {
+            modelo.addRow(new Object[]{ cid.getId(), cid.getNome(), cid.getEstado().getSigla()});
+        }
+        tabela.setModel(modelo);
+
+    }
+
+    /** This method is called from within the constructor to
+     * initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        campoNome = new javax.swing.JTextField();
+        btSalvar = new javax.swing.JButton();
+        btSair = new javax.swing.JButton();
+        btExcluir = new javax.swing.JButton();
+        btAlterar = new javax.swing.JButton();
+        btCancelar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        campoCodigo = new javax.swing.JTextField();
+        comboCidade = new javax.swing.JComboBox();
+        btNovo = new javax.swing.JButton();
+        painelTabela = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabela = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
+        fFIltro = new javax.swing.JTextField();
+        comboTipo = new javax.swing.JComboBox();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestão de Cidades");
+
+        jLabel2.setText("Nome:");
+
+        jLabel3.setText("Estado:");
+
+        btSalvar.setText("Salvar");
+        btSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSalvarActionPerformed(evt);
+            }
+        });
+
+        btSair.setText("Sair");
+        btSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSairActionPerformed(evt);
+            }
+        });
+
+        btExcluir.setText("Excluir");
+        btExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btExcluirActionPerformed(evt);
+            }
+        });
+
+        btAlterar.setText("Alterar");
+        btAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAlterarActionPerformed(evt);
+            }
+        });
+
+        btCancelar.setText("Cancelar");
+        btCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancelarActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Código:");
+
+        campoCodigo.setEditable(false);
+
+        comboCidade.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btNovo.setText("Novo");
+        btNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btNovoActionPerformed(evt);
+            }
+        });
+
+        painelTabela.setBorder(javax.swing.BorderFactory.createTitledBorder("Tabela"));
+
+        tabela.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tabela.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabela);
+
+        javax.swing.GroupLayout painelTabelaLayout = new javax.swing.GroupLayout(painelTabela);
+        painelTabela.setLayout(painelTabelaLayout);
+        painelTabelaLayout.setHorizontalGroup(
+            painelTabelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelTabelaLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        painelTabelaLayout.setVerticalGroup(
+            painelTabelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelTabelaLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jLabel5.setText("Pesquisa");
+
+        fFIltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fFIltroActionPerformed(evt);
+            }
+        });
+        fFIltro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                fFIltroKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                fFIltroKeyTyped(evt);
+            }
+        });
+
+        comboTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nome", "Estado" }));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(campoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(comboCidade, 0, 276, Short.MAX_VALUE)
+                                .addGap(158, 158, 158)))
+                        .addGap(106, 106, 106))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btNovo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btSalvar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btExcluir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btAlterar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btSair, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(37, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(painelTabela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel5)
+                                .addGap(19, 19, 19)
+                                .addComponent(fFIltro, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(39, 39, 39))))
+        );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btAlterar, btCancelar, btExcluir, btNovo, btSair, btSalvar});
+
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(campoCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(campoNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(comboCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btSair)
+                    .addComponent(btCancelar)
+                    .addComponent(btAlterar)
+                    .addComponent(btExcluir)
+                    .addComponent(btSalvar)
+                    .addComponent(btNovo))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(fFIltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(painelTabela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    //Ação do botão salvar
+    private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
+        //Verifico se o metodo validaCampos retorna Verdadeiro, se sim salvo a cidade.
+        if (validaCampos() == true) {
+            cid = new Cidade();
+            if (campoCodigo.getText().equals("")) {
+                cid.setId(null);
+            } else {
+                cid.setId(Long.parseLong(campoCodigo.getText()));
+            }
+            cid.setNome(campoNome.getText());
+            cid.setEstado(listaEst.get(comboCidade.getSelectedIndex()));
+            controle.salvar(cid);
+            campoNome.setText("");
+            comboCidade.setSelectedItem("");
+            campoCodigo.setText("");
+            montaTabela();
+            // TODO add your handling code here:
+            validaBotoes("inicio");
+        }
+    }//GEN-LAST:event_btSalvarActionPerformed
+
+    //Ação do botão Sair.
+    private void btSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSairActionPerformed
+        //Fecha a tela.
+        this.dispose();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btSairActionPerformed
+
+    //Ação do Botão Excluir.
+    private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
+        int i = (JOptionPane.showConfirmDialog(null, "Deseja exluir o registro?",
+                "Atenção", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null));
+
+        if (i == 0) {
+            setCid(listaCid.get(tabela.getSelectedRow()));
+            controle.delete(cid);
+            montaTabela();
+            validaBotoes("inicio");
+
+        } else if (i == 1) {
+            limpaCampos();
+            validaBotoes("inicio");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro crítico");
+            limpaCampos();
+            validaBotoes("inicio");
+
+        }
+
+
+    }//GEN-LAST:event_btExcluirActionPerformed
+
+    //Ação do botão alterar.
+    private void btAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAlterarActionPerformed
+        //Chamo o ValidaBotões com a ação alterar.
+        validaBotoes("alterar");
+    }//GEN-LAST:event_btAlterarActionPerformed
+
+    //Ação do botão Cancelar.
+    private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
+        limpaCampos();
+        validaBotoes("inicio");
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btCancelarActionPerformed
+
+    //Limpa os campos da interface
+    public void limpaCampos() {
+        //seta o texto do campo como vazio.
+        campoNome.setText("");
+        //seta o item selecionado como null. Limpa a combo.
+        comboCidade.setSelectedItem(null);
+        campoCodigo.setText("");
+    }
+
+    //Ação do botão Novo.
+    private void btNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNovoActionPerformed
+
+        //Instâncio um novo objeto cidade para o atributo cid.
+        cid = new Cidade();
+        limpaCampos();
+        validaBotoes("novo");
+        campoNome.grabFocus();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btNovoActionPerformed
+
+    //Ação ao clicar em um registro na tabela.
+    private void tabelaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaMouseClicked
+        validaBotoes("selecionado");
+        //Recupero o objeto selecionado na tabela e atribuo no atributo global cid.
+        cid = listaCid.get(tabela.getSelectedRow());
+        //Pego os valores dos atributos do objeto cid selecionado e preencho os campos com seus respectivos valores.
+        campoCodigo.setText(String.valueOf(cid.getId()));
+        campoNome.setText(cid.getNome());
+        comboCidade.setSelectedItem(cid.getEstado().getNome());
+    }//GEN-LAST:event_tabelaMouseClicked
+
+private void fFIltroKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fFIltroKeyTyped
+}//GEN-LAST:event_fFIltroKeyTyped
+
+private void fFIltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fFIltroKeyReleased
+    montaTabela();// TODO add your handling code here:
+}//GEN-LAST:event_fFIltroKeyReleased
+
+private void fFIltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fFIltroActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_fFIltroActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+
+            public void run() {
+                final CidadeCad dialog = new CidadeCad(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        dialog.dispose();
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+    }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btAlterar;
+    private javax.swing.JButton btCancelar;
+    private javax.swing.JButton btExcluir;
+    private javax.swing.JButton btNovo;
+    private javax.swing.JButton btSair;
+    private javax.swing.JButton btSalvar;
+    private javax.swing.JTextField campoCodigo;
+    private javax.swing.JTextField campoNome;
+    private javax.swing.JComboBox comboCidade;
+    private javax.swing.JComboBox comboTipo;
+    private javax.swing.JTextField fFIltro;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel painelTabela;
+    private javax.swing.JTable tabela;
+    // End of variables declaration//GEN-END:variables
+
+    public void icones() {
+        btNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/add.png")));
+        btNovo.setToolTipText("Inserir um registro");
+        btNovo.setSize(30, 30);
+        btNovo.setText("");
+        btAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/altera.png")));
+        btAlterar.setToolTipText("Alterar um registro");
+        btAlterar.setSize(30, 30);
+        btAlterar.setText("");
+        btCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/deleteazul.png")));
+        btCancelar.setToolTipText("Cancela alterações");
+        btCancelar.setSize(30, 30);
+        btCancelar.setText("");
+        btExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/delete.png")));
+        btExcluir.setToolTipText("Remover um registro");
+        btExcluir.setSize(30, 30);
+        btExcluir.setText("");
+        btSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/door_in.png")));
+        btSair.setToolTipText("Fechar o formulário");
+        btSair.setSize(30, 30);
+        btSair.setText("");
+        btSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/accept.png")));
+        btSalvar.setToolTipText("Salva alterações no registro");
+        btSalvar.setSize(30, 30);
+        btSalvar.setText("");
+    }
+}

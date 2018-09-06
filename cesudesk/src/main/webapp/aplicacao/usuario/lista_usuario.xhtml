@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form prependId="false">
+                <p:messages id="messages"/>
+                <p:panel menuTitle="Usuarios Cadastrados no Sistema" header="Usuarios Cadastrados no Sistema">
+                    <p:dataTable value="#{UsuarioMB.lista}" var="u" paginator="true" 
+                                 rows="20" emptyMessage="Nenhum registro encontrado!" paginatorPosition="bottom">
+
+
+                        <p:column id="nomeheader" headerText="Login" filterBy="#{u.nm_usuario}" sortBy="#{u.nm_usuario}">
+                            <h:outputText value="#{u.nm_usuario}"/>
+                        </p:column>
+                        <p:column id="nivelheader" headerText="Nível de Acesso" filterBy="#{u.cargo.desc_cargo}" sortBy="#{u.cargo.desc_cargo}">
+                            <h:outputText value="#{u.cargo.desc_cargo}"/>
+                        </p:column>
+                        <p:column filterBy="#{u.ativo}" headerText="Ativo ('T'ou 'F')" style="text-align: center;" filterOptions="">
+                            <p:selectBooleanCheckbox value="#{u.ativo}" disabled="true"/>
+                        </p:column>
+
+                        <p:column headerText="Ações ">
+                            <p:commandButton action="/aplicacao/usuario/edita_usuario" value="Editar" actionListener="#{UsuarioMB.editar}" ajax="false" icon="ui-icon-pencil">
+                                <f:attribute name="usuario" value="#{u}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <p:commandButton value="Imprimir" onclick="window.print();" icon="ui-icon-print"/>
+                <p:commandButton value="Novo" action="/aplicacao/usuario/edita_usuario" actionListener="#{UsuarioMB.novo()}" ajax="false" icon="ui-icon-plus"/>
+                <p:commandButton value="Voltar" action="/index" ajax="false" immediate="true" icon="ui-icon-arrowreturn-1-w"/>  
+            </h:form>
+
+        </ui:define>
+
+    </ui:decorate>
+</html>

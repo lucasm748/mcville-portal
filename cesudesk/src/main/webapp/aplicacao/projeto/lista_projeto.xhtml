@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:decorate template="/WEB-INF/template.xhtml">
+        <ui:define name="content">
+            <h:form prependId="false">
+                <p:messages id="messages"/>
+                <p:panel menuTitle="Projetos Cadastrados no Sistema" header="Projetos Cadastrados no Sistema">
+                    <p:dataTable value="#{ProjetoMB.lista}" var="u" paginator="true" 
+                                 rows="20" emptyMessage="Nenhum registro encontrado!" paginatorPosition="bottom">
+
+
+                        <p:column id="nomeheader" headerText="Projeto" filterBy="#{u.desc_projeto}" sortBy="#{u.desc_projeto}">
+                            <h:outputText value="#{u.desc_projeto}"/>
+                        </p:column>
+                        <p:column id="nivelheader" headerText="Início do Projeto" filterBy="#{u.dt_inicio}" sortBy="#{u.dt_inicio}">
+                            <h:outputText value="#{u.dt_inicio}"/>
+                        </p:column>
+                        <p:column id="statusheader" headerText="Status do Projeto" filterBy="#{u.tp_statusprojeto}" sortBy="#{u.tp_statusprojeto}">
+                            <h:outputText value="#{u.tp_statusprojeto}"/>
+                        </p:column>
+
+                        <p:column headerText="Ações ">
+                            <p:commandButton action="/aplicacao/projeto/edita_projeto" value="Editar" actionListener="#{ProjetoMB.editar}" ajax="false" icon="ui-icon-pencil">
+                                <f:attribute name="projeto" value="#{u}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <p:commandButton value="Imprimir" onclick="window.print();" icon="ui-icon-print"/>
+                <p:commandButton value="Novo" action="/aplicacao/projeto/edita_projeto" actionListener="#{ProjetoMB.novo}" ajax="false" icon="ui-icon-plus"/>
+                <p:commandButton value="Voltar" action="/index" ajax="false" immediate="true" icon="ui-icon-arrowreturn-1-w"/>  
+
+            </h:form>
+        </ui:define>
+    </ui:decorate>
+</html>

@@ -1,0 +1,496 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package view;
+
+import dao.CidadeDAO;
+import dao.EstadoDAO;
+import entity.Cidade;
+import entity.Estado;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author MC Ville
+ */
+public class DlgCidade extends javax.swing.JDialog {
+
+    /**
+     * Creates new form DlgCidade
+     */
+    private List<Cidade> listaCidade = new ArrayList<Cidade>();
+    private List<Estado> listaEstado = new ArrayList<Estado>();
+    private Cidade cid;
+    private CidadeDAO dao;
+    private EstadoDAO dao_estado;
+
+    public DlgCidade(java.awt.Frame parent, boolean modal) {
+        //   super(parent, modal);
+        initComponents();
+        dao = new CidadeDAO();
+        dao_estado =  new EstadoDAO();
+        montaTabela();
+        montaCombo();
+        validaBotoes("inicio");
+    }
+
+    public void validaBotoes(String acao) {
+        if (acao.equals("inicio")) {
+            //setEnabled habilita ou desabilita o botão ou tabela.
+            bt_novo.setEnabled(true);
+            bt_salvar.setEnabled(false);
+            bt_excluir.setEnabled(false);
+            bt_editar.setEnabled(false);
+            bt_cancelar.setEnabled(false);
+            //setEditable habilita ou desabilita os campos.
+            f_nome.setEnabled(false);
+            c_cidade.setEnabled(false);
+            f_codigo.setEnabled(false);
+            tb_dados.setEnabled(true);
+            f_filtro.setEnabled(true);
+        } else if (acao.equals("novo") || acao.equals("alterar")) {
+            bt_novo.setEnabled(false);
+            bt_salvar.setEnabled(true);
+            bt_excluir.setEnabled(false);
+            bt_editar.setEnabled(false);
+            bt_cancelar.setEnabled(true);
+            f_nome.setEnabled(true);
+            c_cidade.setEnabled(true);
+            f_codigo.setEnabled(false);
+            tb_dados.setEnabled(false);
+            f_filtro.setEnabled(false);
+        } else if (acao.equals("selecionado")) {
+            bt_novo.setEnabled(true);
+            bt_salvar.setEnabled(false);
+            bt_excluir.setEnabled(true);
+            bt_editar.setEnabled(true);
+            bt_cancelar.setEnabled(false);
+            f_nome.setEnabled(false);
+            c_cidade.setEnabled(false);
+            f_codigo.setEnabled(false);
+            tb_dados.setEnabled(true);
+            f_filtro.setEnabled(true);
+        }
+    }
+
+    public void limpaCampos() {
+        //seta o texto do campo como vazio.
+        f_nome.setText("");
+        //seta o item selecionado como null. Limpa a combo.
+        c_cidade.setSelectedItem("");
+        f_codigo.setText("");
+    }
+    // Monta uma combo com seus itens.
+    public void montaCombo() {
+        c_cidade.removeAllItems();
+        listaEstado = dao_estado.findAll();
+        for (Estado e : listaEstado) {
+            c_cidade.addItem(e.getNome() + " - " + e.getSigla());
+        }
+
+    }
+    /**
+     * **********ÚTIL**********************************************************
+     */
+    //Valida os campos obrigatórios de um cadastro, 
+    //retornando um boolean true quando verdadeiro ou false quando tiver algum campo em branco.
+    public Boolean validaCampos() {
+        if (f_nome.getText().equals("")) {
+            //exibe uma mensagem para o usuario.
+            JOptionPane.showMessageDialog(null, "O campo nome do Cidade é obrigatório!");
+            f_nome.grabFocus();
+            return false;
+
+        }
+//        if (f_sigla.getText().equals("")) {
+//            JOptionPane.showMessageDialog(null, "O campo Sigla deve ser preenchido!");
+//            f_sigla.grabFocus();
+//            return false;
+//        } 
+        else {
+
+            return true;
+        }
+    }
+
+    public void montaTabela() {
+        if (c_tipo.getSelectedIndex() == 0) {
+            listaCidade = dao.lista_filtrando("id", f_filtro.getText());
+        } else if (c_tipo.getSelectedIndex() == 1) {
+            listaCidade = dao.lista_filtrando("nome", f_filtro.getText());
+        }
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        modelo.addColumn("ID");
+        modelo.addColumn("Nome");
+        modelo.addColumn("Estado");
+        for (Cidade cid : listaCidade) {
+            modelo.addRow(new Object[]{cid.getId(), cid.getNome(), cid.getEstado().getNome()});
+        }
+        tb_dados.setModel(modelo);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tb_dados = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        f_nome = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        bt_novo = new javax.swing.JButton();
+        bt_editar = new javax.swing.JButton();
+        bt_cancelar = new javax.swing.JButton();
+        bt_salvar = new javax.swing.JButton();
+        bt_excluir = new javax.swing.JButton();
+        f_filtro = new javax.swing.JTextField();
+        bt_filtrar = new javax.swing.JButton();
+        f_codigo = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        c_tipo = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        c_cidade = new javax.swing.JComboBox<>();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        tb_dados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Código", "Nome", "Sigla"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tb_dados.setName("tb_dados"); // NOI18N
+        tb_dados.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tb_dadosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tb_dados);
+
+        jLabel1.setText("Nome");
+
+        f_nome.setName("f_nome"); // NOI18N
+
+        jLabel2.setText("Estado");
+
+        bt_novo.setText("Novo");
+        bt_novo.setName("bt_novo"); // NOI18N
+        bt_novo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_novoActionPerformed(evt);
+            }
+        });
+
+        bt_editar.setText("Editar");
+        bt_editar.setName("bt_editar"); // NOI18N
+        bt_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_editarActionPerformed(evt);
+            }
+        });
+
+        bt_cancelar.setText("Cancelar");
+        bt_cancelar.setName("bt_cancelar"); // NOI18N
+        bt_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_cancelarActionPerformed(evt);
+            }
+        });
+
+        bt_salvar.setText("Salvar");
+        bt_salvar.setName("bt_salvar"); // NOI18N
+        bt_salvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_salvarActionPerformed(evt);
+            }
+        });
+
+        bt_excluir.setText("Excluir");
+        bt_excluir.setName("bt_excluir"); // NOI18N
+        bt_excluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_excluirActionPerformed(evt);
+            }
+        });
+
+        bt_filtrar.setText("Filtrar");
+        bt_filtrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_filtrarActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Código");
+
+        c_tipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Código", "Nome", "Estado" }));
+        c_tipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                c_tipoActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Filtar por");
+
+        jLabel5.setText("Filtro");
+
+        c_cidade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(c_tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(f_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bt_filtrar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(f_nome, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(c_cidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bt_novo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bt_editar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bt_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bt_salvar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bt_excluir, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(f_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bt_novo)
+                    .addComponent(bt_editar)
+                    .addComponent(bt_cancelar)
+                    .addComponent(bt_salvar)
+                    .addComponent(bt_excluir))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(f_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(f_nome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(c_cidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(26, 26, 26)))
+                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(c_tipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(f_filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bt_filtrar))
+                .addGap(9, 9, 9)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void bt_novoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_novoActionPerformed
+        cid = new Cidade();
+        limpaCampos();
+        validaBotoes("novo");
+        f_nome.grabFocus();
+    }//GEN-LAST:event_bt_novoActionPerformed
+
+    private void bt_salvarActionPerformed(java.awt.event.ActionEvent evt) {
+        if (validaCampos() == true) {
+            cid = new Cidade();
+            if (f_codigo.getText().equals("")) {
+                cid.setId(null);
+            } else {
+                cid.setId(Long.parseLong(f_codigo.getText()));
+            }
+            cid.setNome(f_nome.getText());
+            cid.setEstado(listaEstado.get(c_cidade.getSelectedIndex()));
+            dao.merge(cid);
+            f_nome.setText("");
+            c_cidade.setSelectedItem("");
+            f_codigo.setText("");
+            montaTabela();
+            validaBotoes("inicio");
+
+            // TODO add your handling code here:
+        }
+    }
+
+    private void c_tipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_tipoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_tipoActionPerformed
+
+    private void bt_filtrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_filtrarActionPerformed
+        montaTabela();
+    }//GEN-LAST:event_bt_filtrarActionPerformed
+
+    private void bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_editarActionPerformed
+        validaBotoes("alterar");
+    }//GEN-LAST:event_bt_editarActionPerformed
+
+    private void tb_dadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_dadosMouseClicked
+        validaBotoes("selecionado");
+        //Recupero o objeto selecionado na tabela e atribuo no atributo global cid.
+        cid = listaCidade.get(tb_dados.getSelectedRow());
+        //Pego os valores dos atributos do objeto cid selecionado e preencho os campos com seus respectivos valores.
+        f_codigo.setText(String.valueOf(cid.getId()));
+        f_nome.setText(cid.getNome());
+        c_cidade.setSelectedItem(cid.getEstado().getNome()+" - "+cid.getEstado().getSigla() );
+        
+    }//GEN-LAST:event_tb_dadosMouseClicked
+
+    private void bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_cancelarActionPerformed
+        limpaCampos();
+        validaBotoes("inicio");
+    }//GEN-LAST:event_bt_cancelarActionPerformed
+
+    private void bt_excluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_excluirActionPerformed
+        int i = (JOptionPane.showConfirmDialog(null, "Deseja exluir o registro?",
+                "Atenção", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null));
+
+        if (i == 0) {
+            setEst(listaCidade.get(tb_dados.getSelectedRow()));
+            dao.remove(cid);
+            montaTabela();
+        } else if (i == 1) {
+            limpaCampos();
+            validaBotoes("inicio");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro crítico");
+            limpaCampos();
+            validaBotoes("inicio");
+        }
+    }//GEN-LAST:event_bt_excluirActionPerformed
+    public void setEst(Cidade cid) {
+        this.cid = cid;
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(DlgCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(DlgCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(DlgCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(DlgCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                DlgCidade dialog = new DlgCidade(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bt_cancelar;
+    private javax.swing.JButton bt_editar;
+    private javax.swing.JButton bt_excluir;
+    private javax.swing.JButton bt_filtrar;
+    private javax.swing.JButton bt_novo;
+    private javax.swing.JButton bt_salvar;
+    private javax.swing.JComboBox<String> c_cidade;
+    private javax.swing.JComboBox<String> c_tipo;
+    private javax.swing.JTextField f_codigo;
+    private javax.swing.JTextField f_filtro;
+    private javax.swing.JTextField f_nome;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tb_dados;
+    // End of variables declaration//GEN-END:variables
+}
