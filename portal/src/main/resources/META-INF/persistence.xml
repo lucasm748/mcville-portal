@@ -12,6 +12,8 @@
     <class>entity.Dependente</class>
     <class>entity.Restricao</class>
     <class>entity.Financiamento</class>
+    <class>entity.Anexo</class>
+    <class>entity.Empresa</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/portaldb"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>

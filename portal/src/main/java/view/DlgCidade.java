@@ -168,6 +168,7 @@ public class DlgCidade extends javax.swing.JDialog {
         c_cidade = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastro de Cidades");
 
         tb_dados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

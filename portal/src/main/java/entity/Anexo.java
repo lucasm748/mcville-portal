@@ -7,11 +7,13 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -20,18 +22,19 @@ import javax.persistence.TemporalType;
  * @author MC Ville
  */
 @Entity
-public class Dependente implements Serializable {
+public class Anexo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column
-    private String nome;
-    @Temporal(TemporalType.DATE)
-    private Date dt_nascimento;
-    @Column
-    private String parentesco;
+    @Lob
+    private byte[] anexo;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dh_anexado;
+    @ManyToOne
+    @JoinColumn(name="ID_CLIENTE")
+    private Cliente cliente;
 
     public Long getId() {
         return id;
@@ -41,28 +44,28 @@ public class Dependente implements Serializable {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public byte[] getAnexo() {
+        return anexo;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setAnexo(byte[] anexo) {
+        this.anexo = anexo;
     }
 
-    public Date getDt_nascimento() {
-        return dt_nascimento;
+    public Date getDh_anexado() {
+        return dh_anexado;
     }
 
-    public void setDt_nascimento(Date dt_nascimento) {
-        this.dt_nascimento = dt_nascimento;
+    public void setDh_anexado(Date dh_anexado) {
+        this.dh_anexado = dh_anexado;
     }
 
-    public String getParentesco() {
-        return parentesco;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public void setParentesco(String parentesco) {
-        this.parentesco = parentesco;
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
     
 }

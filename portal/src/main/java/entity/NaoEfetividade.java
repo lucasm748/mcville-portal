@@ -6,21 +6,18 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author MC Ville
  */
 @Entity
-public class Dependente implements Serializable {
+public class NaoEfetividade implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -28,10 +25,8 @@ public class Dependente implements Serializable {
     private Long id;
     @Column
     private String nome;
-    @Temporal(TemporalType.DATE)
-    private Date dt_nascimento;
     @Column
-    private String parentesco;
+    private String Descricao;
 
     public Long getId() {
         return id;
@@ -49,20 +44,13 @@ public class Dependente implements Serializable {
         this.nome = nome;
     }
 
-    public Date getDt_nascimento() {
-        return dt_nascimento;
+    public String getDescricao() {
+        return Descricao;
     }
 
-    public void setDt_nascimento(Date dt_nascimento) {
-        this.dt_nascimento = dt_nascimento;
+    public void setDescricao(String Descricao) {
+        this.Descricao = Descricao;
     }
 
-    public String getParentesco() {
-        return parentesco;
-    }
-
-    public void setParentesco(String parentesco) {
-        this.parentesco = parentesco;
-    }
     
 }
