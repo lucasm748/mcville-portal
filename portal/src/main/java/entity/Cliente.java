@@ -51,6 +51,8 @@ public class Cliente implements Serializable {
     @Column
     private String cep;
     @Column
+    private String bairro;
+    @Column
     private String ds_nome_conjuge;
     @Column
     private String ds_empregador_conjuge;
@@ -72,6 +74,10 @@ public class Cliente implements Serializable {
     private Date dt_admissao_conjuge;
     @Temporal(TemporalType.DATE)
     private Date dt_venda_casa;
+    @Temporal(TemporalType.DATE)
+    private Date dt_cadastro;
+    @Temporal(TemporalType.DATE)
+    private Date dt_ultima_alteracao;
     @Column
     private String tp_estado_civil;
     @Column
@@ -91,9 +97,21 @@ public class Cliente implements Serializable {
     @Column
     private String tp_casa_transferida;
     @Column
+    private String tp_inclui_conjuge;
+    @Column
+    private String tp_possui_tres_anos;
+    @Column
     private BigDecimal vl_fgts;
     @Column
     private BigDecimal vl_fgts_conjuge;
+    @Column
+    private BigDecimal vl_renda_mensal_bruta;
+    @Column
+    private BigDecimal vl_renda_mensal_conjuge;
+    @Column
+    private BigDecimal vl_renda_informal;
+    @Column
+    private BigDecimal vl_renda_informal_conjuge;
     @Column
     private BigDecimal vl_renda_familiar;
     @Column
@@ -106,6 +124,12 @@ public class Cliente implements Serializable {
     private Cidade cidade;
     @Column
     private String ds_observacao;
+    @Column
+    private String ds_observacao_renda;
+    @Column
+    private String ds_observacao_renda_conjuge;
+    @Column
+    private String ds_observacao_possui_imoveis;
     @ManyToOne
     private Status status;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER )
@@ -450,6 +474,30 @@ public class Cliente implements Serializable {
 
     public void setRestricoes(List<Restricao> restricoes) {
         this.restricoes = restricoes;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getTp_inclui_conjuge() {
+        return tp_inclui_conjuge;
+    }
+
+    public void setTp_inclui_conjuge(String tp_inclui_conjuge) {
+        this.tp_inclui_conjuge = tp_inclui_conjuge;
+    }
+
+    public String getTp_possui_tres_anos() {
+        return tp_possui_tres_anos;
+    }
+
+    public void setTp_possui_tres_anos(String tp_possui_tres_anos) {
+        this.tp_possui_tres_anos = tp_possui_tres_anos;
     }
     
 }

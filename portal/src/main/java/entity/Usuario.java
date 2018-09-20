@@ -18,7 +18,7 @@ import javax.persistence.ManyToOne;
  * @author MC Ville
  */
 @Entity
-public class Usuário implements Serializable {
+public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id

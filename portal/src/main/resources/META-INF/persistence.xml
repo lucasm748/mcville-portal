@@ -5,7 +5,6 @@
     <class>entity.Estado</class>
     <class>entity.Cidade</class>
     <class>entity.Setor</class>
-    <class>entity.Usuário</class>
     <class>entity.Cargo</class>
     <class>entity.Cliente</class>
     <class>entity.Status</class>
@@ -14,6 +13,7 @@
     <class>entity.Financiamento</class>
     <class>entity.Anexo</class>
     <class>entity.Empresa</class>
+    <class>entity.Usuario</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/portaldb"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>
